@@ -13,7 +13,7 @@ export const countUsers = async (req: Request, res: Response) => {
 		const totalCharacters = Number(countCharactersResult.rows[0].count);
 		const totalGuildsResult = await pool.query(countGuildsQuery);
 		const totalGuilds = Number(totalGuildsResult.rows[0].count);
-		const peakOnline = '9999';
+		const peakOnline = 9999;
 		const serverStatus = {totalAccounts, totalCharacters, totalGuilds, peakOnline};
 		console.log(serverStatus);
 		res.json(serverStatus);

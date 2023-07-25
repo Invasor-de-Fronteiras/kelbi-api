@@ -1,12 +1,21 @@
 import express from 'express';
+import cors, {type CorsOptions} from 'cors';
 import pool from './dbConfig';
 import userRoutes from './routes/userRoutes';
 import rankRoutes from './routes/rankRoutes';
 
 const app = express();
 app.use(express.json());
+
 app.use('/users', userRoutes);
 app.use('/road', rankRoutes);
+
+export const corsOption: CorsOptions = {
+	origin: 'http://localhost:5173/home',
+	optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOption));
 
 const testDatabaseConnection = async () => {
 	try {
