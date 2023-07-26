@@ -1,32 +1,20 @@
 import express from 'express';
 import cors, {type CorsOptions} from 'cors';
-import pool from './dbConfig';
 import userRoutes from './routes/userRoutes';
 import rankRoutes from './routes/rankRoutes';
-
-const app = express();
-app.use(express.json());
-
-app.use('/users', userRoutes);
-app.use('/road', rankRoutes);
+import {testDatabaseConnection} from './utils/databaseUtils';
 
 export const corsOption: CorsOptions = {
-	origin: 'http://localhost:5173/home',
+	origin: process.env.ORIGIN,
 	optionsSuccessStatus: 200,
 };
 
+const app = express();
+app.use(express.json());
 app.use(cors(corsOption));
 
-const testDatabaseConnection = async () => {
-	try {
-		const client = await pool.connect();
-		console.log('Database connection successfully established!');
-		client.release();
-	} catch (error) {
-		console.log(process.env.DB_PASSWORD);
-		console.error('Error connecting to database: ', error);
-	}
-};
+app.use('/users', userRoutes);
+app.use('/road', rankRoutes);
 
 (async () => {
 	try {
