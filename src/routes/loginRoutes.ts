@@ -1,8 +1,9 @@
 import express from 'express';
-import {loginGameAccount} from '../controllers/login';
+import {getUserData, loginGameAccount} from '../controllers/login';
 
 const router = express.Router();
 
 router.get('/ingame', loginGameAccount);
+router.get('/userdata', getUserData);
 
 export default router;
