@@ -66,7 +66,7 @@ export const getUserData = async (req: Request, res: Response) => {
 
 	try {
 		const decoded = validateToken(token);
-		const {rows} = await pool.query('SELECT u.id, u.username, u.dev, uc.provider_id FROM users u JOIN user_connections uc ON u.id = uc.id WHERE u.id = $1;', [decoded.id]);
+		const {rows} = await pool.query('SELECT u.id, u.username, u.dev, uc.provider_id FROM users u JOIN user_connections uc ON u.id = uc.user_id WHERE u.id = $1;', [decoded.id]);
 
 		res.status(200).json({...rows[0]});
 	} catch (error) {
