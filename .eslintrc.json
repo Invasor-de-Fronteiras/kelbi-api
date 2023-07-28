@@ -3,11 +3,11 @@
         "es2021": true,
         "node": true
     },
-    "extends": "xo",
+    "extends": ["xo", "xo-typescript/space"],
     "overrides": [
         {
             "extends": [
-                "xo-typescript"
+                "xo-typescript/space"
             ],
             "files": [
                 "*.ts",
