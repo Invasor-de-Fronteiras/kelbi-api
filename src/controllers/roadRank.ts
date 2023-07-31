@@ -17,8 +17,22 @@ export const soloFloorRank = async (req: Request, res: Response) => {
     const totalCount = parseInt(countResult.rows[0].count as string, 10);
 
     const offset = (page - 1) * rowsPerPage;
+    console.log('offset', offset);
+    console.log('totalcount', totalCount);
 
-    const soloFloorRankQuery = (`SELECT characters.name, rengoku_score.max_stages_sp, rengoku_score.max_points_sp FROM rengoku_score INNER JOIN characters ON rengoku_score.character_id = characters.id WHERE rengoku_score.max_stages_sp > 0 ORDER BY rengoku_score.max_stages_sp DESC LIMIT ${rowsPerPage} OFFSET ${offset};`);
+    const soloFloorRankQuery = (`
+			SELECT
+				characters.user_id,
+				characters.name,
+				rengoku_score.max_stages_sp,
+				rengoku_score.max_points_sp,
+				user_connections.provider_id
+			FROM rengoku_score
+			LEFT JOIN characters ON rengoku_score.character_id = characters.id
+			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
+			WHERE rengoku_score.max_stages_sp > 0
+			ORDER BY rengoku_score.max_stages_sp DESC
+			LIMIT ${rowsPerPage} OFFSET ${offset};`);
 
     const {rows} = await pool.query(soloFloorRankQuery);
     res.status(200).json({total: totalCount, page, data: rows});
@@ -40,12 +54,25 @@ export const groupFloorRank = async (req: Request, res: Response) => {
       return;
     }
 
-    const countResult = await pool.query('SELECT COUNT(*) FROM rengoku_score WHERE max_stages_sp > 0');
+    const countResult = await pool.query('SELECT COUNT(*) FROM rengoku_score WHERE max_stages_mp > 0');
     const totalCount = parseInt(countResult.rows[0].count as string, 10);
 
     const offset = (page - 1) * rowsPerPage;
 
-    const groupFloorRankQuery = (`SELECT characters.name, rengoku_score.max_stages_mp, rengoku_score.max_points_mp FROM rengoku_score INNER JOIN characters ON rengoku_score.character_id = characters.id WHERE rengoku_score.max_stages_mp > 0 ORDER BY rengoku_score.max_stages_mp DESC LIMIT ${rowsPerPage} OFFSET ${offset};`);
+    const groupFloorRankQuery = (`
+			SELECT
+				characters.user_id,
+				characters.name,
+				rengoku_score.max_stages_mp,
+				rengoku_score.max_points_mp,
+				user_connections.provider_id
+			FROM rengoku_score
+			LEFT JOIN characters ON rengoku_score.character_id = characters.id
+			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
+			WHERE rengoku_score.max_stages_mp > 0
+			ORDER BY rengoku_score.max_stages_mp DESC
+			LIMIT ${rowsPerPage} OFFSET ${offset};
+		`);
 
     const {rows} = await pool.query(groupFloorRankQuery);
     res.status(200).json({total: totalCount, page, data: rows});
@@ -72,7 +99,20 @@ export const soloPointsRank = async (req: Request, res: Response) => {
 
     const offset = (page - 1) * rowsPerPage;
 
-    const soloPointsRankQuery = (`SELECT characters.name, rengoku_score.max_stages_sp, rengoku_score.max_points_sp FROM rengoku_score INNER JOIN characters ON rengoku_score.character_id = characters.id WHERE rengoku_score.max_stages_sp > 0 ORDER BY rengoku_score.max_points_sp DESC LIMIT ${rowsPerPage} OFFSET ${offset};`);
+    const soloPointsRankQuery = (`
+			SELECT
+				characters.user_id,
+				characters.name,
+				rengoku_score.max_stages_sp,
+				rengoku_score.max_points_sp,
+				user_connections.provider_id
+			FROM rengoku_score
+			LEFT JOIN characters ON rengoku_score.character_id = characters.id
+			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
+			WHERE rengoku_score.max_stages_sp > 0
+			ORDER BY rengoku_score.max_points_sp DESC
+			LIMIT ${rowsPerPage} OFFSET ${offset};
+		`);
 
     const {rows} = await pool.query(soloPointsRankQuery);
     res.status(200).json({total: totalCount, page, data: rows});
@@ -94,12 +134,25 @@ export const groupPointsRank = async (req: Request, res: Response) => {
       return;
     }
 
-    const countResult = await pool.query('SELECT COUNT(*) FROM rengoku_score WHERE max_stages_sp > 0');
+    const countResult = await pool.query('SELECT COUNT(*) FROM rengoku_score WHERE max_stages_mp > 0');
     const totalCount = parseInt(countResult.rows[0].count as string, 10);
 
     const offset = (page - 1) * rowsPerPage;
 
-    const groupPointsRankQuery = (`SELECT characters.name, rengoku_score.max_stages_mp, rengoku_score.max_points_mp FROM rengoku_score INNER JOIN characters ON rengoku_score.character_id = characters.id WHERE rengoku_score.max_stages_mp > 0 ORDER BY rengoku_score.max_points_mp DESC LIMIT ${rowsPerPage} OFFSET ${offset};`);
+    const groupPointsRankQuery = (`
+			SELECT
+				characters.user_id,
+				characters.name,
+				rengoku_score.max_stages_mp,
+				rengoku_score.max_points_mp,
+				user_connections.provider_id
+			FROM rengoku_score
+			LEFT JOIN characters ON rengoku_score.character_id = characters.id
+			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
+			WHERE rengoku_score.max_stages_mp > 0
+			ORDER BY rengoku_score.max_points_mp DESC
+			LIMIT ${rowsPerPage} OFFSET ${offset};
+		`);
 
     const {rows} = await pool.query(groupPointsRankQuery);
     res.status(200).json({total: totalCount, page, data: rows});

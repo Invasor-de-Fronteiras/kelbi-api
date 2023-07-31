@@ -37,7 +37,7 @@ export const loginGameAccount = async (req: Request, res: Response) => {
 
     if (isPasswordValid) {
       // eslint-disable-next-line
-			const token: string = jwt.sign({id: user.id}, process.env.LOGIN_KEY, {expiresIn: '720h'});
+			const token: string = jwt.sign({id: user.id}, process.env.LOGIN_KEY, {expiresIn: '168h'});
       console.log(`${user.username} successfully logged in`);
       return res.json({token});
     }
