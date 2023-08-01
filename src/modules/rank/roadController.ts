@@ -1,5 +1,5 @@
 import {type Request, type Response} from 'express';
-import pool from '../dbConfig';
+import pool from '../../dbConfig';
 
 export const soloFloorRank = async (req: Request, res: Response) => {
   try {

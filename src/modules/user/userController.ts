@@ -1,5 +1,5 @@
 import {type Request, type Response} from 'express';
-import pool from '../dbConfig';
+import pool from '../../dbConfig';
 
 const countAccountsQuery = 'SELECT COUNT(*) FROM users';
 const countCharactersQuery = 'SELECT COUNT(*) FROM characters WHERE name IS NOT NULL AND name != \'\'';

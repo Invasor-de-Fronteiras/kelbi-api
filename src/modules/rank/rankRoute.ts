@@ -1,5 +1,5 @@
 import express from 'express';
-import {groupFloorRank, groupPointsRank, soloFloorRank, soloPointsRank} from '../controllers/roadRank';
+import {groupFloorRank, groupPointsRank, soloFloorRank, soloPointsRank} from './roadController';
 
 const router = express.Router();
 

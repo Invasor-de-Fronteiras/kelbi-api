@@ -1,8 +1,8 @@
 import express from 'express';
 import cors, {type CorsOptions} from 'cors';
-import userRoutes from './routes/userRoutes';
-import rankRoutes from './routes/rankRoutes';
-import loginRoutes from './routes/loginRoutes';
+import userRoutes from './modules/user/userRoute';
+import rankRoutes from './modules/rank/rankRoute';
+import loginRoutes from './modules/auth/authRoute';
 
 import {testDatabaseConnection} from './utils/databaseUtils';
 

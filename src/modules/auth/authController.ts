@@ -1,5 +1,5 @@
 import {type Request, type Response} from 'express';
-import pool from '../dbConfig';
+import pool from '../../dbConfig';
 import bcrypt from 'bcrypt';
 import jwt, {type Secret} from 'jsonwebtoken';
 
