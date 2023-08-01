@@ -32,9 +32,9 @@ export const soloFloorRank = async (req: Request, res: Response) => {
 			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
 			WHERE rengoku_score.max_stages_sp > 0
 			ORDER BY rengoku_score.max_stages_sp DESC
-			LIMIT ${rowsPerPage} OFFSET ${offset};`);
+			LIMIT $1 OFFSET $2;`);
 
-    const {rows} = await pool.query(soloFloorRankQuery);
+    const {rows} = await pool.query(soloFloorRankQuery, [rowsPerPage, offset]);
     res.status(200).json({total: totalCount, page, data: rows});
   } catch (error) {
     console.error('Error fetching top players: ', error);
@@ -71,10 +71,10 @@ export const groupFloorRank = async (req: Request, res: Response) => {
 			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
 			WHERE rengoku_score.max_stages_mp > 0
 			ORDER BY rengoku_score.max_stages_mp DESC
-			LIMIT ${rowsPerPage} OFFSET ${offset};
+			LIMIT $1 OFFSET $2;
 		`);
 
-    const {rows} = await pool.query(groupFloorRankQuery);
+    const {rows} = await pool.query(groupFloorRankQuery, [rowsPerPage, offset]);
     res.status(200).json({total: totalCount, page, data: rows});
   } catch (error) {
     console.error('Error fetching top players: ', error);
@@ -111,10 +111,10 @@ export const soloPointsRank = async (req: Request, res: Response) => {
 			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
 			WHERE rengoku_score.max_stages_sp > 0
 			ORDER BY rengoku_score.max_points_sp DESC
-			LIMIT ${rowsPerPage} OFFSET ${offset};
+			LIMIT $1 OFFSET $2;
 		`);
 
-    const {rows} = await pool.query(soloPointsRankQuery);
+    const {rows} = await pool.query(soloPointsRankQuery, [rowsPerPage, offset]);
     res.status(200).json({total: totalCount, page, data: rows});
   } catch (error) {
     console.error('Error fetching top players: ', error);
@@ -151,10 +151,10 @@ export const groupPointsRank = async (req: Request, res: Response) => {
 			LEFT JOIN user_connections ON characters.user_id = user_connections.user_id
 			WHERE rengoku_score.max_stages_mp > 0
 			ORDER BY rengoku_score.max_points_mp DESC
-			LIMIT ${rowsPerPage} OFFSET ${offset};
+			LIMIT $1 OFFSET $2;
 		`);
 
-    const {rows} = await pool.query(groupPointsRankQuery);
+    const {rows} = await pool.query(groupPointsRankQuery, [rowsPerPage, offset]);
     res.status(200).json({total: totalCount, page, data: rows});
   } catch (error) {
     console.error('Error fetching top players: ', error);
