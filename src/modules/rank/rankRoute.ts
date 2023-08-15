@@ -1,11 +1,8 @@
 import express from 'express';
-import {groupFloorRank, groupPointsRank, soloFloorRank, soloPointsRank} from './roadController';
+import {roadRank} from './roadController';
 
 const router = express.Router();
 
-router.get('/solof', soloFloorRank);
-router.get('/groupf', groupFloorRank);
-router.get('/solop', soloPointsRank);
-router.get('/groupp', groupPointsRank);
+router.get('/rank', roadRank);
 
 export default router;

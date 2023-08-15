@@ -22,38 +22,35 @@ export const loginGameAccount = async (req: Request, res: Response) => {
     const {rows} = await pool.query<User>('SELECT id, username, password FROM users WHERE username = $1', [login]);
 
     if (rows.length === 0) {
-      console.log('Login failed! Invalid user');
-      return res.status(401).json({error: 'Invalid user'});
+      console.log('Login failed! Invalid Credentials');
+      return res.status(401).json({error: 'Invalid Credentials'});
     }
 
     const user: User = {
       id: rows[0].id,
       username: rows[0].username,
-      password: rows[0].password.toString(),
+      password: rows[0].password,
     };
 
-    // eslint-disable-next-line
-		const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-      // eslint-disable-next-line
-			const token: string = jwt.sign({id: user.id}, process.env.LOGIN_KEY, {expiresIn: '168h'});
+      const token: string = jwt.sign({id: user.id}, process.env.LOGIN_KEY!, {expiresIn: '168h'});
       console.log(`${user.username} successfully logged in`);
       return res.json({token});
     }
 
-    console.log('Login failed! Invalid Password');
-    return res.status(401).json({error: 'Invalid Password'});
+    console.log('Login failed! Invalid Credentials');
+    return res.status(401).json({error: 'Invalid Credentials'});
   } catch (error) {
-    console.log('Login failed! Login failed');
+    console.log('Login failed!');
     res.status(500).json({error: 'Login failed'});
   }
 };
 
 export const validateToken = (token: string) => {
   try {
-    // eslint-disable-next-line
-		const decoded = jwt.verify(token, process.env.LOGIN_KEY as Secret) as DecodedToken;
+    const decoded = jwt.verify(token, process.env.LOGIN_KEY as Secret) as DecodedToken;
     return decoded;
   } catch (error) {
     console.log('Error processing token');

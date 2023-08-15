@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import express from 'express';
 import cors, {type CorsOptions} from 'cors';
 import userRoutes from './modules/user/userRoute';
 import rankRoutes from './modules/rank/rankRoute';
 import loginRoutes from './modules/auth/authRoute';
-
 import {testDatabaseConnection} from './utils/databaseUtils';
 
 export const corsOption: CorsOptions = {
