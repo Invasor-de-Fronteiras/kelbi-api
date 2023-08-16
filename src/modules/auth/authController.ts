@@ -2,6 +2,7 @@ import {type Request, type Response} from 'express';
 import pool from '../../dbConfig';
 import bcrypt from 'bcrypt';
 import jwt, {type Secret} from 'jsonwebtoken';
+import {getDiscordInfo} from '../../utils/discordAvatarUtils';
 
 type User = {
   id: number;
@@ -64,8 +65,9 @@ export const getUserData = async (req: Request, res: Response) => {
   try {
     const decoded = validateToken(token);
     const {rows} = await pool.query('SELECT u.id, u.username, u.dev, uc.provider_id FROM users u JOIN user_connections uc ON u.id = uc.user_id WHERE u.id = $1;', [decoded.id]);
+    const discordInfo = getDiscordInfo(String(rows[0].provider_id));
 
-    res.status(200).json({...rows[0]});
+    res.status(200).json({...rows[0], discordInfo});
   } catch (error) {
     console.log('Error processing token');
     res.status(401).json({error: 'Error processing token'});

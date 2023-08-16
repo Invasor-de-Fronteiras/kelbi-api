@@ -1,5 +1,15 @@
 import {type Request, type Response} from 'express';
 import pool from '../../dbConfig';
+import {getDiscordInfo} from '../../utils/discordAvatarUtils';
+
+type UserData = {
+  user_id: string;
+  name: string;
+  max_stages: number;
+  max_points: number;
+  provider_id: string;
+  avatarUrl: string;
+};
 
 export const roadRank = async (req: Request, res: Response) => {
   try {
@@ -18,7 +28,21 @@ export const roadRank = async (req: Request, res: Response) => {
 
     const offset = (page - 1) * rowsPerPage;
     const {rows} = await pool.query(dbQuery.query, [rowsPerPage, offset]);
-    res.status(200).json({total: totalCount, page, data: rows});
+
+    const rankUserDataPromises = rows.map(async (item): Promise<UserData> => {
+      let discordAvatar = '';
+      const discordUserInfo = await getDiscordInfo(item.provider_id as string);
+
+      if (discordUserInfo && typeof discordUserInfo.avatarUrl === 'string') {
+        discordAvatar = discordUserInfo.avatarUrl;
+      }
+
+      return {...item as UserData, avatarUrl: discordAvatar};
+    });
+
+    const rankUserData = await Promise.all(rankUserDataPromises);
+
+    res.status(200).json({total: totalCount, page, data: rankUserData});
   } catch (error) {
     res.status(500).json({error: 'Error fetching top players'});
   }
