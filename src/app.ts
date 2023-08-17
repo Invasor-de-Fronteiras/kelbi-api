@@ -4,6 +4,7 @@ import cors, {type CorsOptions} from 'cors';
 import userRoutes from './modules/user/userRoute';
 import rankRoutes from './modules/rank/rankRoute';
 import loginRoutes from './modules/auth/authRoute';
+import discordRoutes from './modules/discord/discordRoute';
 import {testDatabaseConnection} from './utils/databaseUtils';
 
 export const corsOption: CorsOptions = {
@@ -18,6 +19,7 @@ app.use(cors(corsOption));
 app.use('/users', userRoutes);
 app.use('/road', rankRoutes);
 app.use('/login', loginRoutes);
+app.use('/discord', discordRoutes);
 
 (async () => {
   try {
