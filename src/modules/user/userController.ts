@@ -4,6 +4,7 @@ import pool from '../../dbConfig';
 const countAccountsQuery = 'SELECT COUNT(*) FROM users';
 const countCharactersQuery = 'SELECT COUNT(*) FROM characters WHERE name IS NOT NULL AND name != \'\'';
 const countGuildsQuery = 'SELECT COUNT(*) FROM guilds';
+const countOnlineNow = 'SELECT SUM (current_players) FROM servers;';
 
 export const countUsers = async (req: Request, res: Response) => {
   try {
@@ -13,8 +14,9 @@ export const countUsers = async (req: Request, res: Response) => {
     const totalCharacters = Number(countCharactersResult.rows[0].count);
     const totalGuildsResult = await pool.query(countGuildsQuery);
     const totalGuilds = Number(totalGuildsResult.rows[0].count);
-    const peakOnline = 9999;
-    const serverStatus = {totalAccounts, totalCharacters, totalGuilds, peakOnline};
+    const onlineNowResult = await pool.query(countOnlineNow);
+    const onlineNow = Number(onlineNowResult.rows[0].sum);
+    const serverStatus = {totalAccounts, totalCharacters, totalGuilds, onlineNow};
     console.log(serverStatus);
     res.json(serverStatus);
   } catch (error) {
